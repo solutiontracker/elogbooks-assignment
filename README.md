@@ -108,6 +108,9 @@ laradock/workspace/Dockerfile
 ```
 7. After all docker container images build successfully then run your images to active your development environment to run your both applications laravel & react.
 
+```
+docker-compose up -d nginx  phpmyadmin workspace
+```
 8. Now laravel application will be host successfully and you can open it.
 
    This is root point of it
