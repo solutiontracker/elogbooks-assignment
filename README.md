@@ -93,7 +93,9 @@ server {
 ```
 127.0.0.1       elogbooks.react
 ```
-6. Open terminal inside this 'laradock' folder
+6. Go to root of laravel application and rename .env.example to .env
+
+7. Open terminal inside this 'laradock' folder
 
    Run this command
 ```
@@ -106,23 +108,23 @@ If you have a look on this docker file you will see a lot of things will be buil
 ```
 laradock/workspace/Dockerfile
 ```
-7. After all docker container images build successfully then run your images to active your development environment to run your both applications laravel & react.
+8. After all docker container images build successfully then run your images to active your development environment to run your both applications laravel & react.
 
 ```
 docker-compose up -d nginx  phpmyadmin workspace
 ```
-8. Now laravel application will be host successfully and you can open it.
+9. Now laravel application will be host successfully and you can open it.
 
    This is root point of it
 ```
 http://elogbooks.api
 ```
-9. You can open your deployed react application from this endpoint.
+10. You can open your deployed react application from this endpoint.
 ```
 http://elogbooks.react
 ```
 
-10. You can look basic laravel implementation with some basic operations/features.
+11. You can look basic laravel implementation with some basic operations/features.
     Migrations.
 
 #### Features
@@ -138,7 +140,7 @@ http://elogbooks.react
 * pagination
 * search
 
-10. You can look basic react implementation with a list and
+12. You can look basic react implementation with a list and
 ‘log a job’ view
    
 #### Features
