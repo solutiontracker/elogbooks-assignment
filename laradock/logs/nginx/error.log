@@ -1,0 +1,2 @@
+2024/01/23 17:43:59 [emerg] 9#9: duplicate location "/" in /etc/nginx/sites-available/elogbooks-react.conf:26
+2024/01/23 17:44:19 [emerg] 9#9: duplicate location "/" in /etc/nginx/sites-available/elogbooks-react.conf:26
