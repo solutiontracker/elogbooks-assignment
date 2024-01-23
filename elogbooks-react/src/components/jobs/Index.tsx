@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // MyComponent.tsx
 import React, { FC } from 'react';
 import Box from '@mui/material/Box';
@@ -11,15 +12,46 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom'
+import UseJobService from '@/store/services/UseJobService';
+import UseResponseService from '@/store/services/UseResponseService';
+import { Job } from '@/models/Job';
+import debounce from "lodash/debounce";
 
 // Use FC (Functional Component) type for functional components
 const Index: FC = () => {
 
+    const ref = React.useRef(false);
+
+    const [page, setPage] = React.useState(0);
+
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+    const { response } = UseResponseService();
+
+    const { jobs, dispatchJobAction } = UseJobService();
+
+    const handleSearch = (query: string) => {
+        dispatchJobAction({ query: query, page: 0, limit: rowsPerPage });
+        setPage(0);
+    }
+
+    const debouncedHandleSearch = React.useMemo(() => {
+        return debounce(handleSearch, 1000);
+    }, []);
+
+    React.useEffect(() => {
+        dispatchJobAction({ query: '', page: page, limit: rowsPerPage });
+    }, [rowsPerPage, page]);
+
+    React.useEffect(() => {
+        if (jobs.length > 0) {
+            ref.current = true;
+        }
+    }, [jobs]);
     interface Column {
-        id: 'name' | 'code' | 'population' | 'size' | 'density';
+        id: 'id' | 'summary' | 'status' | 'property' | 'user';
         label: string;
         minWidth?: number;
         align?: 'right';
@@ -27,70 +59,30 @@ const Index: FC = () => {
     }
 
     const columns: readonly Column[] = [
-        { id: 'name', label: 'Name', minWidth: 170 },
-        { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+        { id: 'id', label: 'ID', minWidth: 170 },
+        { id: 'summary', label: 'Summary', minWidth: 100 },
         {
-            id: 'population',
-            label: 'Population',
+            id: 'status',
+            label: 'Status',
             minWidth: 170,
             align: 'right',
             format: (value: number) => value.toLocaleString('en-US'),
         },
         {
-            id: 'size',
-            label: 'Size\u00a0(km\u00b2)',
+            id: 'property',
+            label: 'Property name',
             minWidth: 170,
             align: 'right',
             format: (value: number) => value.toLocaleString('en-US'),
         },
         {
-            id: 'density',
-            label: 'Density',
+            id: 'user',
+            label: 'Raised By',
             minWidth: 170,
             align: 'right',
             format: (value: number) => value.toFixed(2),
         },
     ];
-
-    interface Data {
-        name: string;
-        code: string;
-        population: number;
-        size: number;
-        density: number;
-    }
-
-    function createData(
-        name: string,
-        code: string,
-        population: number,
-        size: number,
-    ): Data {
-        const density = population / size;
-        return { name, code, population, size, density };
-    }
-
-    const rows = [
-        createData('India', 'IN', 1324171354, 3287263),
-        createData('China', 'CN', 1403500365, 9596961),
-        createData('Italy', 'IT', 60483973, 301340),
-        createData('United States', 'US', 327167434, 9833520),
-        createData('Canada', 'CA', 37602103, 9984670),
-        createData('Australia', 'AU', 25475400, 7692024),
-        createData('Germany', 'DE', 83019200, 357578),
-        createData('Ireland', 'IE', 4857000, 70273),
-        createData('Mexico', 'MX', 126577691, 1972550),
-        createData('Japan', 'JP', 126317000, 377973),
-        createData('France', 'FR', 67022000, 640679),
-        createData('United Kingdom', 'GB', 67545757, 242495),
-        createData('Russia', 'RU', 146793744, 17098246),
-        createData('Nigeria', 'NG', 200962417, 923768),
-        createData('Brazil', 'BR', 210147125, 8515767),
-    ];
-
-    const [page, setPage] = React.useState(0);
-
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -100,7 +92,6 @@ const Index: FC = () => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
 
     return (
         <React.Fragment>
@@ -113,14 +104,14 @@ const Index: FC = () => {
                                 label="Search"
                                 type="search"
                                 variant="outlined"
+                                onChange={(e) => debouncedHandleSearch(e.target.value)}
                                 style={{ flex: 1 }}
                             />
-                            <IconButton aria-label="search" color="primary">
-                                <SearchIcon />
-                            </IconButton>
                         </div>
                     </Box>
-                    <Button style={{ flex: 1, justifyContent: 'center' }} variant="contained">Add Job</Button>
+                    <Link to="/job/add">
+                        <Button style={{ flex: 1, justifyContent: 'center' }} variant="contained">Add Job</Button>
+                    </Link>
                 </Box>
 
                 <Box flex={4} width={'100%'}>
@@ -141,13 +132,12 @@ const Index: FC = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((row) => {
+                                    {jobs
+                                        .map((row: Job) => {
                                             return (
-                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                     {columns.map((column) => {
-                                                        const value = row[column.id];
+                                                        const value = row?.[column.id];
                                                         return (
                                                             <TableCell key={column.id} align={column.align}>
                                                                 {column.format && typeof value === 'number'
@@ -165,8 +155,8 @@ const Index: FC = () => {
                         <TablePagination
                             rowsPerPageOptions={[10, 25, 100]}
                             component="div"
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
+                            count={response?.data?.meta?.total}
+                            rowsPerPage={response?.data?.meta?.per_page}
                             page={page}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}

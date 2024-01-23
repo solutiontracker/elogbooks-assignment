@@ -6,7 +6,9 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.6",
+    "@mui/joy": "^5.0.0-beta.24",
     "@mui/material": "^5.15.6",
+    "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,11 +16,21 @@
     "@types/node": "^16.18.74",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "@types/react-redux": "^7.1.24",
     "@types/react-router-dom": "^5.3.3",
+    "@types/redux-logger": "^3.0.9",
+    "@types/redux-saga": "^0.10.5",
+    "axios": "^1.6.5",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
+    "redux": "^4.2.0",
+    "redux-first-history": "^5.1.1",
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^1.2.2",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -47,6 +59,7 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0"
+    "@craco/craco": "^7.1.0",
+    "@types/lodash": "^4.14.202"
   }
 }
